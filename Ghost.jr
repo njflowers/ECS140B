@@ -7,7 +7,7 @@ public class Ghost extends GamePiece {
 		posX = spawnX = x;
 		posY = spawnY = y;
 		this.color = color;
-		this.id = GHOST;
+
 	}
 	
 	public void play() {

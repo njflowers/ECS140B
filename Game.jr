@@ -53,13 +53,14 @@ public class Game extends JPanel {
 	
 	public op void mainLoop() {
 		while (runMainLoop) {
-			if (inGame) {
+
+         if (inGame) {
             user.play();
 			}
 		
 			repaint();
 			try {
-				Thread.sleep(5);
+				Thread.sleep(25);
 			} catch (Exception e) { e.printStackTrace(); }
 	
 		}
@@ -70,14 +71,15 @@ public class Game extends JPanel {
 		Graphics2D g2d = ((Graphics2D)g);
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, resX, resY);
-	    
-	    //Render logic here for all objects (walls, items, ghosts, player) 
+		
+         //Render logic here for all objects (walls, items, ghosts, player) 
 		for (Item[] oneD : map.getItems()) {
 			for (Item item : oneD) {
 				if (item != null)
 					item.paint(g2d);
 			}
 		}
+
 		if (inGame)
         	user.paint(g2d);
       	else

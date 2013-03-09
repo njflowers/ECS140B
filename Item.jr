@@ -13,18 +13,24 @@ public class Item extends MapObject {
 	public static final int EDGE_BOTTOMRIGHT = 8;
 	
 	private int type;
+   private int pointValue;
 	
-	public Item(int x, int y, int type, Color color, Map m) {
+	public Item(int x, int y, int type, int pointValue, Color color, Map m) {
 		posX = x;
 		posY = y;
 		map = m;
 		this.type = type;
 		this.color = color;
-		this.id = ITEM;
 	}
 	
    public boolean isEdge() {
       return (type != ITEM_FOOD && type != ITEM_POWERUP);
+   }
+
+
+   public int use() {
+      map.removeItem(posX, posY);
+      return pointValue;
    }
 
 	public void paint(Graphics2D g) {

@@ -48,25 +48,23 @@ public class Map {
 		/*width = w;
 		height = h;
 		blocksize = bs;*/
-		Color col;
 		items = new Item[width][height];
 		for (int x=0; x<width; x++) {
 			for (int y=0; y<height; y++) {
 				switch (mapdata[y*width+x]) {
 					case 0:
 						items[x][y] = null;
-						continue;
-					case Item.ITEM_FOOD:
-						col = Color.white;
 						break;
+					case Item.ITEM_FOOD:
+						items[x][y] = new Item(x, y, mapdata[y*width+x], 25, Color.white, this);
+                  break;
 					case Item.ITEM_POWERUP:
-						col = Color.white;
+						items[x][y] = new Item(x, y, mapdata[y*width+x], 100, Color.white, this);
 						break;
 					default:
-						col = Color.red;
+						items[x][y] = new Item(x, y, mapdata[y*width+x], 0, Color.red, this);
 						break;
 				}
-				items[x][y] = new Item(x, y, mapdata[y*width+x], col, this);
 			}
 		}
 
@@ -103,5 +101,9 @@ public class Map {
 	public Item[][] getItems() {
 		return items;
 	}
+
+   public void removeItem(int x, int y) {
+      items[x][y] = null;
+   }
 	
 }

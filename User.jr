@@ -9,10 +9,11 @@ public class User extends GamePiece {
 		posX = spawnX = x;
 		posY = spawnY = y;
       map = m;
-      offsetX = offsetY = map.blocksize/2;
+      offsetX = 0;
+      offsetY = map.blocksize/2;
       direction = LEFT;
+      speed = map.blocksize/2;
 		this.color = color;
-		this.id = USER;
 	}
 	
    public cap void (int) getMoveOp() {
@@ -20,23 +21,22 @@ public class User extends GamePiece {
    }
 
 	public void play() {
+      boolean changedTile = false;
+
 	   inni void move(int dir) {
-         if (dir != direction) {
-            //offsetX = offsetY = map.blocksize/2;
-            direction = dir;
-         }
+
+         direction = dir;
 
          if (dir == LEFT) {
             if (map.isOpen(posX-1,posY)) {
                offsetX -= speed;
                if (offsetX < 0) {
                   posX--;
-                  if (posX == 0) posX = 28;
+                  if (posX == 0) posX = 27;
                   offsetX += map.blocksize;
+                  changedTile = true;
                }
             }
-            else 
-               offsetX = offsetY = map.blocksize/2;
          }
 
          else if (dir == RIGHT) {
@@ -46,10 +46,9 @@ public class User extends GamePiece {
                   posX++;
                   if (posX == 27) posX = 0;
                   offsetX -= map.blocksize;
+                  changedTile = true;
                }
             }
-            else
-               offsetX = offsetY = map.blocksize/2;
          }
 
          else if (dir == UP) {
@@ -58,10 +57,9 @@ public class User extends GamePiece {
                if (offsetY < 0) {
                   posY--;
                   offsetY += map.blocksize;
+                  changedTile = true;
                }
             }
-            else
-               offsetX = offsetY = map.blocksize/2;
          }
 
          else { //dir == DOWN
@@ -70,11 +68,16 @@ public class User extends GamePiece {
                if (offsetY > map.blocksize) {
                   posY++;
                   offsetY -= map.blocksize;
+                  changedTile = true;
                }
             }
-            else
-               offsetX = offsetY = map.blocksize/2;
          }
+
+         if (changedTile) {
+            Item item = map.getItem(posX,posY);
+            if (item != null)
+               item.use();
+         } 
       }
       [] else { }
    }
@@ -88,19 +91,19 @@ public class User extends GamePiece {
       switch (direction) {
          case LEFT:
             mouth = 305; //open
-            if (offsetX <= map.blocksize/2)
+            if (offsetX < map.blocksize/2)
                mouth = 360; //closed
             g.fillArc(x-12, y-12, 24, 24, 205, mouth);
             break;
          case RIGHT:
             mouth = 305; //open
-            if (offsetX >= map.blocksize/2)
+            if (offsetX <= map.blocksize/2)
                mouth = 360; //closed
             g.fillArc(x-12, y-12, 24, 24, 25, mouth);
             break;
          case UP:
             mouth = 305; //open
-            if (offsetY >= map.blocksize/2)
+            if (offsetY < map.blocksize/2)
                mouth = 360; //closed
             g.fillArc(x-12, y-12, 24, 24, 115, mouth);
             break;
