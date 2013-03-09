@@ -1,0 +1,16 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+public abstract class MapObject {
+	public static int USER = 1;
+	public static int GHOST = 2;
+	public static int ITEM = 3;
+	
+	protected Map map;
+	protected Color color;
+	protected int posX;
+	protected int posY;
+	protected int id;
+	
+	public abstract void paint(Graphics2D g);
+}

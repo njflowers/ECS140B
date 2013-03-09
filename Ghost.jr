@@ -1,0 +1,18 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+public class Ghost extends GamePiece {
+	
+	public Ghost(int x, int y, Color color) {
+		posX = spawnX = x;
+		posY = spawnY = y;
+		this.color = color;
+		this.id = GHOST;
+	}
+	
+	public void play() {
+	}
+	
+	public void paint(Graphics2D g) {
+	}
+}

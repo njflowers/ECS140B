@@ -1,0 +1,21 @@
+import javax.swing.JFrame;
+
+public class Main extends JFrame {
+	
+	public Main(int resx, int resy)
+	{
+       op void keyChar(int);
+       KeyManager ki = new KeyManager(keyChar);
+       addKeyListener(ki);
+	    add(new Game(resx, resy, keyChar));
+	    setTitle("PacMan");
+	    setDefaultCloseOperation(EXIT_ON_CLOSE);
+	    setSize(resx, resy);
+	    setLocationRelativeTo(null);
+	    setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new Main(1280, 700);
+	}
+}
