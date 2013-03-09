@@ -1,0 +1,129 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.awt.event.KeyEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.JFrame;
+
+public class Game extends JPanel {
+	
+   private cap void (int) keyChar;
+	private int resX;
+	private int resY;
+	private boolean inGame;
+	private boolean paused;
+	private boolean runMainLoop;
+	
+	private User user;
+	private Map map;
+	private Ghosts AI;
+	
+	public Game(int x, int y, cap void (int) ki) {
+		keyChar = ki;
+      inGame = false;
+		paused = false;
+		resX = x;
+		resY = y;
+		//user = new User
+		map = new Map(0,0,0);
+		initGame();
+	}
+	
+	public void initGame() {
+		runMainLoop = true;
+      send mainLoop();
+	}
+	
+	public op void mainLoop() {
+		while (runMainLoop) {
+			if (inGame) {
+			}
+		
+			repaint();
+			try {
+				Thread.sleep(20);
+			} catch (Exception e) { e.printStackTrace(); }
+	
+		}
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = ((Graphics2D)g);
+		g.setColor(Color.black);
+		g.fillRect(0, 0, resX, resY	);
+		
+		if (inGame) {
+         //Render logic here for all objects (walls, items, ghosts, player) 
+			for (Item[] oneD : map.getItems()) {
+				for (Item item : oneD) {
+					if (item != null)
+						item.paint(g2d);
+				}
+			}
+		}
+        
+      else {
+        	showIntro(g2d);
+      }
+	}
+	
+	
+	public void showIntro(Graphics2D g2d) {
+		g2d.setColor(new Color(0, 32, 48));
+	
+		g2d.fillRect(50, resY/2 - 30, resX/2 - 100, 50);
+		g2d.setColor(Color.white);
+		g2d.drawRect(50, resY/2 - 30, resX/2 - 100, 50);
+
+		String s = "Press enter to start.";
+		Font small = new Font("Helvetica", Font.BOLD, 14);
+		FontMetrics metr = this.getFontMetrics(small);
+
+		g2d.setColor(Color.white);
+		g2d.setFont(small);
+		g2d.drawString(s, (resY - metr.stringWidth(s)) / 2, resX / 2);
+	}
+
+   process KeyListener {
+      KeyManager keyManager = new KeyManager(keyChar);
+      addKeyListener(keyManager);
+
+      while (true) {
+         inni void keyChar(int key) {
+            System.out.println(key);
+
+            if (inGame) {
+               switch (key) {
+                  case KeyEvent.VK_LEFT:
+                     break;
+                  case KeyEvent.VK_RIGHT:
+                     break;
+                  case KeyEvent.VK_UP:
+                     break;
+                  case KeyEvent.VK_DOWN:
+                     break;
+               }
+            }
+      
+            else {
+               if (key == KeyEvent.VK_ENTER)
+                  inGame = true;
+            }
+         }
+      } 
+   }
+}
