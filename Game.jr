@@ -21,7 +21,9 @@ import javax.swing.JFrame;
 public class Game extends JPanel {
 	
    private cap void (int) keyChar;
-	private int resX;
+	private cap void (int) moveUser;
+   
+   private int resX;
 	private int resY;
 	private boolean inGame;
 	private boolean paused;
@@ -33,28 +35,31 @@ public class Game extends JPanel {
 	
 	public Game(int x, int y, cap void (int) ki) {
 		keyChar = ki;
-      inGame = false;
-		paused = false;
 		resX = x;
 		resY = y;
-		//user = new User
-		map = new Map(0,0,0);
 		initGame();
 	}
 	
 	public void initGame() {
-		runMainLoop = true;
+		inGame = false;
+		paused = false;
+      runMainLoop = true;
+	   map = new Map(0,0,0);
+      user = map.getUser();
+      moveUser = user.getMoveOp();
+      AI = map.getAI();
       send mainLoop();
 	}
 	
 	public op void mainLoop() {
 		while (runMainLoop) {
 			if (inGame) {
+            user.play();
 			}
 		
 			repaint();
 			try {
-				Thread.sleep(20);
+				Thread.sleep(5);
 			} catch (Exception e) { e.printStackTrace(); }
 	
 		}
@@ -63,8 +68,8 @@ public class Game extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = ((Graphics2D)g);
-		g.setColor(Color.black);
-		g.fillRect(0, 0, resX, resY	);
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, resX, resY);
 		
 		if (inGame) {
          //Render logic here for all objects (walls, items, ghosts, player) 
@@ -74,6 +79,8 @@ public class Game extends JPanel {
 						item.paint(g2d);
 				}
 			}
+
+         user.paint(g2d);
 		}
         
       else {
@@ -95,34 +102,51 @@ public class Game extends JPanel {
 
 		g2d.setColor(Color.white);
 		g2d.setFont(small);
-		g2d.drawString(s, (resY - metr.stringWidth(s)) / 2, resX / 2);
+		g2d.drawString(s, (resX/2 - metr.stringWidth(s)) / 2, resY / 2);
 	}
 
    process KeyListener {
-      KeyManager keyManager = new KeyManager(keyChar);
-      addKeyListener(keyManager);
 
       while (true) {
          inni void keyChar(int key) {
-            System.out.println(key);
 
             if (inGame) {
                switch (key) {
                   case KeyEvent.VK_LEFT:
+                     send moveUser(GamePiece.LEFT); 
                      break;
                   case KeyEvent.VK_RIGHT:
+                     send moveUser(GamePiece.RIGHT);
                      break;
                   case KeyEvent.VK_UP:
+                     send moveUser(GamePiece.UP);
                      break;
                   case KeyEvent.VK_DOWN:
+                     send moveUser(GamePiece.DOWN);
+                     break;
+                  case KeyEvent.VK_SPACE:
+                     paused = !paused;
+                     break;
+                  case KeyEvent.VK_ESCAPE:
+                     inGame = false;
+                     break;
+                  default:
                      break;
                }
             }
       
             else {
-               if (key == KeyEvent.VK_ENTER)
-                  inGame = true;
-            }
+               switch (key) {
+                  case KeyEvent.VK_ENTER:
+                     inGame = true;
+                     break;
+                  case KeyEvent.VK_ESCAPE:
+                     runMainLoop = false;
+                     break;
+                  default:
+                     break;
+              }
+           }
          }
       } 
    }
