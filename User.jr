@@ -1,0 +1,116 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+public class User extends GamePiece {
+	
+   private op void move(int);
+
+	public User(int x, int y, Color color, Map m) {
+		posX = spawnX = x;
+		posY = spawnY = y;
+      map = m;
+      offsetX = 0;
+      offsetY = map.blocksize/2;
+      direction = LEFT;
+      speed = map.blocksize/2;
+		this.color = color;
+	}
+	
+   public cap void (int) getMoveOp() {
+      return move;
+   }
+
+	public void play() {
+      boolean changedTile = false;
+
+	   inni void move(int dir) {
+
+         direction = dir;
+
+         if (dir == LEFT) {
+            if (map.isOpen(posX-1,posY)) {
+               offsetX -= speed;
+               if (offsetX < 0) {
+                  posX--;
+                  offsetX += map.blocksize;
+                  changedTile = true;
+               }
+            }
+         }
+
+         else if (dir == RIGHT) {
+            if (map.isOpen(posX+1,posY)) {
+               offsetX += speed;
+               if (offsetX > map.blocksize) {
+                  posX++;
+                  offsetX -= map.blocksize;
+                  changedTile = true;
+               }
+            }
+         }
+
+         else if (dir == UP) {
+            if (map.isOpen(posX,posY-1)) {
+               offsetY -= speed;
+               if (offsetY < 0) {
+                  posY--;
+                  offsetY += map.blocksize;
+                  changedTile = true;
+               }
+            }
+         }
+
+         else { //dir == DOWN
+            if (map.isOpen(posX,posY+1)) {
+               offsetY += speed;
+               if (offsetY > map.blocksize) {
+                  posY++;
+                  offsetY -= map.blocksize;
+                  changedTile = true;
+               }
+            }
+         }
+
+         if (changedTile) {
+            Item item = map.getItem(posX,posY);
+            if (item != null)
+               item.use();
+         } 
+      }
+      [] else { }
+   }
+	
+	public void paint(Graphics2D g) {
+		int x = (posX * map.blocksize + offsetX);
+      int y = (posY * map.blocksize + offsetY);
+      int mouth; //open = 305, closed = 360      
+      g.setColor(color);
+
+      switch (direction) {
+         case LEFT:
+            mouth = 305; //open
+            if (offsetX < map.blocksize/2)
+               mouth = 360; //closed
+            g.fillArc(x-12, y-12, 24, 24, 205, mouth);
+            break;
+         case RIGHT:
+            mouth = 305; //open
+            if (offsetX <= map.blocksize/2)
+               mouth = 360; //closed
+            g.fillArc(x-12, y-12, 24, 24, 25, mouth);
+            break;
+         case UP:
+            mouth = 305; //open
+            if (offsetY < map.blocksize/2)
+               mouth = 360; //closed
+            g.fillArc(x-12, y-12, 24, 24, 115, mouth);
+            break;
+         case DOWN:
+            mouth = 305; //open
+            if (offsetY <= map.blocksize/2)
+               mouth = 360; //closed
+            g.fillArc(x-12, y-12, 24, 24, 295, mouth);
+            break;
+      } 
+   }
+}

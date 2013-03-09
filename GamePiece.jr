@@ -1,0 +1,19 @@
+import java.awt.Graphics2D;
+
+public abstract class GamePiece extends MapObject {
+	
+	public static final int LEFT = 1;
+   public static final int RIGHT = 2;
+   public static final int UP = 3;
+   public static final int DOWN = 4;
+   
+   protected int spawnX, spawnY;
+	protected int offsetX, offsetY;
+   protected int direction;
+   protected int speed=6;
+
+	public abstract void play();
+	
+	public abstract void paint(Graphics2D g);
+	
+}

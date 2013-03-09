@@ -1,0 +1,73 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+public class Item extends MapObject {
+	
+	public static final int ITEM_FOOD = 1;
+	public static final int ITEM_POWERUP = 2;
+	public static final int EDGE_VERTICAL = 3;
+	public static final int EDGE_HORIZONTAL = 4;
+	public static final int EDGE_TOPLEFT = 5;
+	public static final int EDGE_BOTTOMLEFT = 6;
+	public static final int EDGE_TOPRIGHT = 7;
+	public static final int EDGE_BOTTOMRIGHT = 8;
+	
+	private int type;
+   private int pointValue;
+	
+	public Item(int x, int y, int type, int pointValue, Color color, Map m) {
+		posX = x;
+		posY = y;
+		map = m;
+		this.type = type;
+		this.color = color;
+	}
+	
+   public boolean isEdge() {
+      return (type != ITEM_FOOD && type != ITEM_POWERUP);
+   }
+
+   public int use() {
+      map.removeItem(posX, posY);
+      return pointValue;
+   }
+
+	public void paint(Graphics2D g) {
+		g.setColor(color);
+		if (type >= EDGE_VERTICAL) {
+			//Item is an edge
+			if (type == EDGE_VERTICAL) {
+				g.fillRoundRect(posX*map.blocksize+10, posY*map.blocksize, 8, map.blocksize, 0, 0);
+			}
+			else if (type == EDGE_HORIZONTAL) {
+				g.fillRoundRect(posX*map.blocksize, posY*map.blocksize+10, map.blocksize, 8, 0, 0);
+			}
+			else if (type == EDGE_TOPLEFT) {
+				g.fillRoundRect(posX*map.blocksize+(map.blocksize/2), posY*map.blocksize+10, map.blocksize/2, 8, 0, 0);
+            g.fillRoundRect(posX*map.blocksize+10, posY*map.blocksize+(map.blocksize/2), 8, map.blocksize/2, 0, 0);
+			}
+			else if (type == EDGE_BOTTOMLEFT) {
+				g.fillRoundRect(posX*map.blocksize+(map.blocksize/2), posY*map.blocksize+10, map.blocksize/2, 8, 0, 0);
+            g.fillRoundRect(posX*map.blocksize+10, posY*map.blocksize, 8, map.blocksize/2, 0, 0);
+			}
+			else if (type == EDGE_TOPRIGHT) {
+				g.fillRoundRect(posX*map.blocksize, posY*map.blocksize+10, map.blocksize/2, 8, 0, 0);
+            g.fillRoundRect(posX*map.blocksize+10, posY*map.blocksize+(map.blocksize/2), 8, map.blocksize/2, 0, 0);
+			}
+			else if (type == EDGE_BOTTOMRIGHT) {
+				g.fillRoundRect(posX*map.blocksize, posY*map.blocksize+10, map.blocksize/2, 8, 0, 0);
+            g.fillRoundRect(posX*map.blocksize+10, posY*map.blocksize, 8, map.blocksize/2, 0, 0); 
+			}
+		}
+		
+		else {
+			//Normal item: food or powerup
+			int x = (posX * map.blocksize + (map.blocksize/2));
+			int y = (posY * map.blocksize + (map.blocksize/2));
+			if (type == ITEM_FOOD)
+				g.fillArc(x-3, y-3, 6, 6, 0, 360);
+			else if (type == ITEM_POWERUP)
+				g.fillArc(x-6, y-6, 12, 12, 0, 360);			
+		}
+	}
+}

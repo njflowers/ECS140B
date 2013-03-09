@@ -1,0 +1,17 @@
+import java.util.ArrayList;
+
+public class Ghosts {
+	
+	private ArrayList<Ghost> ghosts;
+	private Map map;
+	private User user;
+	
+	public Ghosts(User user, Map m, int numGhosts) {
+		this.user = user;
+		this.map = m;
+		this.ghosts = new ArrayList<Ghost>();
+		
+	}
+	
+	
+}
