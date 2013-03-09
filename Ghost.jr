@@ -3,16 +3,24 @@ import java.awt.Graphics2D;
 
 public class Ghost extends GamePiece {
 	
-	public Ghost(int x, int y, Color color) {
+	public Ghost(int x, int y, Color color, Map m) {
 		posX = spawnX = x;
 		posY = spawnY = y;
+      map = m;
+      offsetX = 0;
+      offsetY = 0;
 		this.color = color;
-
 	}
 	
 	public void play() {
 	}
 	
 	public void paint(Graphics2D g) {
-	}
+	   int x = posX*map.blocksize + offsetX;
+      int y = posY*map.blocksize + offsetY;
+      g.setColor(color);
+      
+      g.fillArc(x, y, 20, 20, 0, 360);
+      g.fillRect(x, y+10, 20, 20);
+   }
 }

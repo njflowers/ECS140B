@@ -1,17 +1,27 @@
 import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 public class Ghosts {
 	
+   private final Color[] ghostColors = 
+               { Color.blue, Color.yellow, Color.pink, Color.cyan };
+
 	private ArrayList<Ghost> ghosts;
 	private Map map;
 	private User user;
 	
-	public Ghosts(User user, Map m, int numGhosts) {
+	public Ghosts(int x, int y, int numGhosts, User user, Map m) {
 		this.user = user;
 		this.map = m;
 		this.ghosts = new ArrayList<Ghost>();
-		
+	   
+      for (int i=0;i<numGhosts;i++)
+         ghosts.add(new Ghost(x+i, y, ghostColors[i], map));
 	}
-	
-	
+
+   public void paint(Graphics2D g) {
+      for (Ghost ghost : ghosts) 
+         ghost.paint(g);
+   }
 }

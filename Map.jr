@@ -69,6 +69,7 @@ public class Map {
 		}
 
       user = new User(14, 23, Color.yellow, this);
+      AI = new Ghosts(12, 14, 4, user, this);
 	}
 	
    public boolean checkBounds(int x, int y) {
