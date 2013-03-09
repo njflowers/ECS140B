@@ -31,6 +31,7 @@ public class User extends GamePiece {
                offsetX -= speed;
                if (offsetX < 0) {
                   posX--;
+                  if (posX == 0) posX = 28;
                   offsetX += map.blocksize;
                }
             }
@@ -43,6 +44,7 @@ public class User extends GamePiece {
                offsetX += speed;
                if (offsetX > map.blocksize) {
                   posX++;
+                  if (posX == 27) posX = 0;
                   offsetX -= map.blocksize;
                }
             }

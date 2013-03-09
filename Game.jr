@@ -99,9 +99,9 @@ public class Game extends JPanel {
 		g2d.drawRect(150, 150, resX-300, 100);
 		// Press Enter box
 		g2d.setColor(new Color(0, 32, 48));
-		g2d.fillRect(100, resY-120, resX - 200, 80);
+		g2d.fillRect(100, resY-110, resX - 200, 80);
 		g2d.setColor(Color.white);
-		g2d.drawRect(100, resY-120, resX - 200, 80);
+		g2d.drawRect(100, resY-110, resX - 200, 80);
 
 		s = "Pac-Man"; 
 		g2d.setFont(large);
@@ -116,11 +116,13 @@ public class Game extends JPanel {
 		s = "Press ENTER to start.";
 		g2d.setColor(Color.white);
 		g2d.setFont(small);
-		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 100);
-		s = "Press ESC to exit.";
-		g2d.setColor(Color.white);
+		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 85);
+		s = "Use ARROW KEYS to move.";
 		g2d.setFont(small);
-		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 70);
+		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 65);
+		s = "Press ESC to exit.";
+		g2d.setFont(small);
+		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 45);
 	}
 
    process KeyListener {
