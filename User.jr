@@ -22,119 +22,64 @@ public class User extends GamePiece {
 
 	public void play() {
       boolean changedTile = false;
-
-	   inni void move(int dir) {
-
+      
+      inni void move(int dir) {
          direction = dir;
-
-         if (dir == LEFT) {
-            if (map.isOpen(posX-1,posY)) {
-               offsetX -= speed;
-               if (offsetX < 0) {
-                  posX--;
-                  if (posX == 0) posX = 2;
-                  offsetX += map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         else if (dir == RIGHT) {
-            if (map.isOpen(posX+1,posY)) {
-               offsetX += speed;
-               if (offsetX > map.blocksize) {
-                  posX++;
-                  if (posX == 27) posX = 0;
-                  offsetX -= map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         else if (dir == UP) {
-            if (map.isOpen(posX,posY-1)) {
-               offsetY -= speed;
-               if (offsetY < 0) {
-                  posY--;
-                  offsetY += map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         else { //dir == DOWN
-            if (map.isOpen(posX,posY+1)) {
-               offsetY += speed;
-               if (offsetY > map.blocksize) {
-                  posY++;
-                  offsetY -= map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         if (changedTile) {
-            Item item = map.getItem(posX,posY);
-            if (item != null)
-               item.use();
-         } 
       }
-      [] else { 
-         int dir = direction;
-         if (dir == LEFT) {
-            if (map.isOpen(posX-1,posY)) {
-               offsetX -= speed;
-               if (offsetX < 0) {
-                  posX--;
-                  if (posX == 0) posX = 2;
-                  offsetX += map.blocksize;
-                  changedTile = true;
-               }
+      [] else { }
+
+      if (direction == LEFT) {
+         if (map.isOpen(posX-1,posY)) {
+            offsetX -= speed;
+            if (offsetX < 0) {
+               posX--;
+               if (posX == 0) posX = 2;
+               offsetX += map.blocksize;
+               changedTile = true;
             }
          }
-
-         else if (dir == RIGHT) {
-            if (map.isOpen(posX+1,posY)) {
-               offsetX += speed;
-               if (offsetX > map.blocksize) {
-                  posX++;
-                  if (posX == 27) posX = 0;
-                  offsetX -= map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         else if (dir == UP) {
-            if (map.isOpen(posX,posY-1)) {
-               offsetY -= speed;
-               if (offsetY < 0) {
-                  posY--;
-                  offsetY += map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         else { //dir == DOWN
-            if (map.isOpen(posX,posY+1)) {
-               offsetY += speed;
-               if (offsetY > map.blocksize) {
-                  posY++;
-                  offsetY -= map.blocksize;
-                  changedTile = true;
-               }
-            }
-         }
-
-         if (changedTile) {
-            Item item = map.getItem(posX,posY);
-            if (item != null)
-               item.use();
-         } 
-
       }
-   }
+
+      else if (direction == RIGHT) {
+         if (map.isOpen(posX+1,posY)) {
+            offsetX += speed;
+            if (offsetX > map.blocksize) {
+               posX++;
+               if (posX == 27) posX = 0;
+               offsetX -= map.blocksize;
+               changedTile = true;
+            }
+         }
+      }
+
+      else if (direction == UP) {
+         if (map.isOpen(posX,posY-1)) {
+            offsetY -= speed;
+            if (offsetY < 0) {
+               posY--;
+               offsetY += map.blocksize;
+               changedTile = true;
+            }
+         }
+      }
+
+      else { //dir == DOWN
+         if (map.isOpen(posX,posY+1)) {
+            offsetY += speed;
+            if (offsetY > map.blocksize) {
+               posY++;
+               offsetY -= map.blocksize;
+               changedTile = true;
+            }
+         }
+      }
+
+      if (changedTile) {
+         Item item = map.getItem(posX,posY);
+         if (item != null)
+            item.use();
+      } 
+   } 
 	
 	public void paint(Graphics2D g) {
 		int x = (posX * map.blocksize + offsetX);

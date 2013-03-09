@@ -55,12 +55,14 @@ public class Game extends JPanel {
 		while (runMainLoop) {
 
          if (inGame) {
-            user.play();
+            if (!paused) {
+               user.play();
+            }
 			}
 		
 			repaint();
 			try {
-				Thread.sleep(25);
+				Thread.sleep(20);
 			} catch (Exception e) { e.printStackTrace(); }
 	
 		}
@@ -80,10 +82,11 @@ public class Game extends JPanel {
 			}
 		}
 
-		if (inGame)
+		if (inGame) {
         	user.paint(g2d);
-      	else
-      	  	showIntro(g2d);
+      }
+      else
+      	showIntro(g2d);
 	}
 	
 	
@@ -101,9 +104,9 @@ public class Game extends JPanel {
 		g2d.drawRect(150, 150, resX-300, 100);
 		// Press Enter box
 		g2d.setColor(new Color(0, 32, 48));
-		g2d.fillRect(100, resY-110, resX - 200, 80);
+		g2d.fillRect(100, resY*3/4, resX - 200, 80);
 		g2d.setColor(Color.white);
-		g2d.drawRect(100, resY-110, resX - 200, 80);
+		g2d.drawRect(100, resY*3/4, resX - 200, 80);
 
 		s = "Pac-Man"; 
 		g2d.setFont(large);
@@ -118,13 +121,13 @@ public class Game extends JPanel {
 		s = "Press ENTER to start.";
 		g2d.setColor(Color.white);
 		g2d.setFont(small);
-		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 85);
+		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, (resY*3/4)+20);
 		s = "Use ARROW KEYS to move.";
 		g2d.setFont(small);
-		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 65);
+		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, (resY*3/4)+40);
 		s = "Press ESC to exit.";
 		g2d.setFont(small);
-		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, resY - 45);
+		g2d.drawString(s, (resX - smetr.stringWidth(s)) / 2, (resY*3/4)+60);
 	}
 
    process KeyListener {
@@ -157,7 +160,7 @@ public class Game extends JPanel {
                }
             }
       
-            else {
+            else { 
                switch (key) {
                   case KeyEvent.VK_ENTER:
                      inGame = true;
@@ -167,9 +170,9 @@ public class Game extends JPanel {
                      break;
                   default:
                      break;
-              }
-           }
-         }
-      } 
-   }
+              } //end switch
+           } //end else
+         } //end inni
+      } //end while
+   } //end process (KeyListener)
 }

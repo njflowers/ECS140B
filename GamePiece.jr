@@ -6,11 +6,11 @@ public abstract class GamePiece extends MapObject {
    public static final int RIGHT = 2;
    public static final int UP = 3;
    public static final int DOWN = 4;
-   
+
    protected int spawnX, spawnY;
 	protected int offsetX, offsetY;
    protected int direction;
-   protected int speed=6;
+   protected int speed=3;
 
 	public abstract void play();
 	
