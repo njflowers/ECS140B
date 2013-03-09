@@ -84,34 +84,29 @@ public class User extends GamePiece {
 	public void paint(Graphics2D g) {
 		int x = (posX * map.blocksize + offsetX);
       int y = (posY * map.blocksize + offsetY);
-      int mouth; //open = 305, closed = 360      
+      int mouth=305; //open = 305, closed = 360      
       g.setColor(color);
 
       switch (direction) {
          case LEFT:
-            mouth = 305; //open
             if (offsetX < map.blocksize/2)
                mouth = 360; //closed
-            g.fillArc(x-12, y-12, 24, 24, 205, mouth);
             break;
          case RIGHT:
-            mouth = 305; //open
             if (offsetX <= map.blocksize/2)
                mouth = 360; //closed
-            g.fillArc(x-12, y-12, 24, 24, 25, mouth);
             break;
          case UP:
-            mouth = 305; //open
             if (offsetY < map.blocksize/2)
                mouth = 360; //closed
-            g.fillArc(x-12, y-12, 24, 24, 115, mouth);
             break;
          case DOWN:
-            mouth = 305; //open
             if (offsetY <= map.blocksize/2)
                mouth = 360; //closed
-            g.fillArc(x-12, y-12, 24, 24, 295, mouth);
             break;
       } 
+
+      //Directional values are actually angle offsets, corresponding to fillArc()'s angle scheme
+      g.fillArc(x-12, y-12, 24, 24, 25+direction, mouth);
    }
 }
