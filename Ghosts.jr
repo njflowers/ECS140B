@@ -5,9 +5,9 @@ import java.awt.Graphics2D;
 public class Ghosts {
 	
    private final Color[] ghostColors = 
-               { Color.blue, Color.yellow, Color.pink, Color.cyan };
+               { Color.red, Color.pink, Color.cyan, Color.orange };
 
-	private ArrayList<Ghost> ghosts;
+	public ArrayList<Ghost> ghosts;
 	private Map map;
 	private User user;
 	
@@ -16,12 +16,22 @@ public class Ghosts {
 		this.map = m;
 		this.ghosts = new ArrayList<Ghost>();
 	   
-      for (int i=0;i<numGhosts;i++)
-         ghosts.add(new Ghost(x+i, y, ghostColors[i], map));
+        for (int i=0;i<numGhosts;i++)
+       		ghosts.add(new Ghost(x+i, y, ghostColors[i], map, user));
 	}
 
-   public void paint(Graphics2D g) {
-      for (Ghost ghost : ghosts) 
-         ghost.paint(g);
-   }
+	public op void respawn() {
+		for (Ghost ghost : ghosts)
+			ghost.respawn();
+	}
+
+	public op void play() {
+		for (Ghost ghost : ghosts)
+			ghost.play();
+	}
+
+    public void paint(Graphics2D g) {
+        for (Ghost ghost : ghosts) 
+        	ghost.paint(g);
+    }
 }

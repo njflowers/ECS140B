@@ -1,26 +1,266 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.ArrayList;
 
 public class Ghost extends GamePiece {
 	
-	public Ghost(int x, int y, Color color, Map m) {
+   private AStarAI AI;
+	private cap void (ArrayList<Point>) path;
+	private boolean trapped;
+	private boolean needsPath;
+	private ArrayList<Point> currentPath;
+	private Point nextMove;
+	private User user;
+
+	public Ghost(int x, int y, Color color, Map m, User usr) {
 		posX = spawnX = x;
 		posY = spawnY = y;
-      map = m;
-      offsetX = 0;
-      offsetY = 0;
+        map = m;
+        offsetX = 0;
+        offsetY = 0;
 		this.color = color;
+		direction = LEFT;
+		AI = new AStarAI(map.width, map.height, map.getRawData());// on new vm();
+		path = AI.getOp();
+		user = usr;
+		needsPath = true;
+	}
+
+	public void play() {
+		boolean nextStep = false;
+
+		if (needsPath) {
+			send AI.createPath(posX, posY, user.getX(), user.getY());
+			receive path(currentPath);
+			needsPath = false;
+			nextMove = currentPath.remove(0);
+		}
+
+		int x = (int)nextMove.getX();
+		int y = (int)nextMove.getY();
+		
+		if (x < posX) { //Next move is left neighbor
+			offsetX -= speed;
+		   if (offsetX <= -(map.blocksize/2)) { // Move into next cell
+				offsetX += map.blocksize;
+				posX -= 1;
+				nextStep = true;
+			}
+		}
+	
+		else if (x > posX)  { //Next move is right neighbor
+			offsetX += speed;
+			if (offsetX >= (map.blocksize*1.5)) {
+				offsetX -= map.blocksize;
+				posX += 1;
+				nextStep = true;
+			}
+		}
+
+		else if (y < posY) { //Next move is top neighbor
+			offsetY -= speed;
+			if (offsetY <= -(map.blocksize/2)) {
+				offsetY += map.blocksize;
+				posY -= 1;
+				nextStep = true;
+			}
+		}
+
+		else if (y > posY) { // Next move is bottom neighbor
+			offsetY += speed;
+			if (offsetY >= (map.blocksize*1.5)) {
+				offsetY -= map.blocksize;
+				posY += 1;
+				nextStep = true;
+			}
+		}
+
+		else
+			nextStep = true;
+		
+		if (currentPath.isEmpty())
+			needsPath = true;
+		else if (nextStep)
+			nextMove = currentPath.remove(0);
 	}
 	
-	public void play() {
+	/*public op void play();
+	public process enemy {
+		while (true) {
+			receive play();
+
+			if (direction == LEFT) {
+		        if (map.isOpen(posX-1,posY)) {
+		            offsetX -= speed;
+		            if (offsetX < 0) {
+		               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+		               posX--;
+		               if (posX == 0) posX = 27;
+		               offsetX += map.blocksize;
+		            }
+		        }
+		        else {
+		            offsetX -= speed;
+		            if (offsetX < map.blocksize/2)
+		               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+		        }
+		    }
+
+	        else if (direction == RIGHT) {
+		        if (map.isOpen(posX+1,posY)) {
+		            offsetX += speed;
+		            if (offsetX > map.blocksize) {
+		               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+		               posX++;
+		               if (posX == 27) posX = 0;
+		               offsetX -= map.blocksize;
+		            }
+		        }
+		        else {
+		            offsetX += speed;
+		            if (offsetX > map.blocksize/2)
+		               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+		        }         
+		    }
+
+		    else if (direction == UP) {
+		        if (map.isOpen(posX,posY-1)) {
+		            offsetY -= speed;
+		            if (offsetY < 0) {
+		               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+		               posY--;
+		               offsetY += map.blocksize;
+		            }
+		        }
+		        else {
+		            offsetY -= speed;
+		            if (offsetY < map.blocksize/2)
+		               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+		        }
+		    }
+
+		    else { //dir == DOWN
+		        if (map.isOpen(posX,posY+1)) {
+		            offsetY += speed;
+		            if (offsetY > map.blocksize) {
+		               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+		               posY++;
+		               offsetY -= map.blocksize;
+		            }
+		        }
+		        else {
+		            offsetY += speed;
+		            if (offsetY > map.blocksize/2)
+		               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+		        }
+		    }
+
+		    newDirection();
+		}
+	}*/
+
+	public op void respawn() {
+		posX = spawnX;
+		posY = spawnY;
+		direction = LEFT;
 	}
+
+	/*public void newDirection() {
+		int paths = 0;
+		boolean[] openPath = new boolean[4];
+		for (int i = 0; i < 4; i++) openPath[i] = false;
+		int l = 0, r = 1, u = 2, d = 3;
+
+		// if a certain path is open, and the current direction isn't
+		// the opposite of that path (i.e. moving backwards)
+		if (map.isOpen(posX-1, posY) 
+			&& direction != RIGHT 
+			&& offsetX % (map.blocksize/2) == 0) { 
+				paths++;
+				openPath[l] = true;
+		}
+		if (map.isOpen(posX+1, posY) 
+			&& direction != LEFT 
+			&& offsetX % (map.blocksize/2) == 0) {
+				paths++;
+				openPath[r] = true;
+		}
+		if (map.isOpen(posX, posY-1) 
+			&& direction != DOWN 
+			&& offsetY % (map.blocksize/2) == 0) {
+				paths++;
+				openPath[u] = true;
+		}
+		if (map.isOpen(posX, posY+1) 
+			&& direction != UP 
+			&& offsetY % (map.blocksize/2) == 0) {
+				paths++;
+				openPath[d] = true;
+		}
+
+		Random gen; float rand;
+		switch(paths) {
+			case 0:
+			case 1:
+               	break;
+
+			case 2:
+			    gen = new Random();
+				rand = gen.nextFloat();
+				for (int i = 0; i < 4; i++) {
+					if (openPath[i]) {
+						rand -= 0.5;
+						if (rand <= 0) openPath[i] = true;
+						else openPath[i] = false;
+					}
+				}
+               	break;
+
+			case 3:
+				gen = new Random();
+				rand = gen.nextFloat();
+				for (int i = 0; i < 4; i++) {
+					if (openPath[i]) {
+						rand -= 0.333;
+						if (rand <= 0) openPath[i] = true;
+						else openPath[i] = false;
+					}
+				}
+               	break;
+
+            // paths == 4 technically not possible since current direction path
+            // isn't allowed
+			case 4: 
+				gen = new Random();
+			    rand = gen.nextFloat();
+				for (int i = 0; i < 4; i++) {
+					if (openPath[i]) {
+						rand -= 1.0/4.0;
+						if (rand <= 0) openPath[i] = true;
+						else openPath[i] = false;
+					}
+				}
+               	break;
+            
+            default:
+             	break;
+		}
+
+		if (openPath[l]) direction = LEFT;
+	   	else if (openPath[r]) direction = RIGHT;
+	   	else if (openPath[u]) direction = UP;
+	   	else if (openPath[d]) direction = DOWN;
+	}*/
 	
 	public void paint(Graphics2D g) {
-	   int x = posX*map.blocksize + offsetX;
+	  int x = posX*map.blocksize + offsetX;
       int y = posY*map.blocksize + offsetY;
-      g.setColor(color);
+
+      if (map.poweredUp) g.setColor(map.powerColor);
+      else g.setColor(color);
       
-      g.fillArc(x, y, 20, 20, 0, 360);
-      g.fillRect(x, y+10, 20, 20);
+      g.fillArc(x-6, y-12, 20, 20, 0, 360);
+      g.fillRect(x-6, y, 20, 20);
    }
 }

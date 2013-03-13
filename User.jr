@@ -2,29 +2,158 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class User extends GamePiece {
-	
+   
    private op void move(int);
+   public static int score = 0;
+   public static int lives = 3;
 
-	public User(int x, int y, Color color, Map m) {
-		posX = spawnX = x;
-		posY = spawnY = y;
+   public User(int x, int y, Color color, Map m) {
+      posX = spawnX = x;
+      posY = spawnY = y;
       map = m;
       offsetX = 0;
       offsetY = map.blocksize/2;
       direction = LEFT;
-      speed = map.blocksize/2;
-		this.color = color;
-	}
-	
+      this.color = color;
+   }
+   
    public cap void (int) getMoveOp() {
       return move;
    }
 
-	public void play() {
+   public op void respawn() {
+      posX = spawnX;
+      posY = spawnY;
+   }
+
+   public op void play();
+   public process pacman {
+      while (true) {
+         receive play();
+         
+         boolean changedTile = false;
+      
+         inni void move(int dir) {
+            //direction = dir;
+            switch (dir) {
+               case LEFT:
+                  if (map.isOpen(posX-1, posY)) direction = dir;
+                  break;
+               case RIGHT:
+                  if (map.isOpen(posX+1, posY)) direction = dir;
+                  break;
+               case UP:
+                  if (map.isOpen(posX, posY-1)) direction = dir;
+                  break;
+               case DOWN:
+                  if (map.isOpen(posX, posY+1)) direction = dir;
+                  break;
+               default:
+                  direction = dir;
+            }
+         }
+         [] else { }
+
+         if (direction == LEFT) {
+            if (map.isOpen(posX-1,posY)) {
+               offsetX -= speed;
+               if (offsetX < 0) {
+                  offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+                  posX--;
+                  if (posX == 0) posX = 27;
+                  offsetX += map.blocksize;
+                  changedTile = true;
+               }
+            }
+            else {
+               offsetX -= speed;
+               if (offsetX < map.blocksize/2)
+                  offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+            }
+         }
+
+         else if (direction == RIGHT) {
+            if (map.isOpen(posX+1,posY)) {
+               offsetX += speed;
+               if (offsetX > map.blocksize) {
+                  offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+                  posX++;
+                  if (posX == 27) posX = 0;
+                  offsetX -= map.blocksize;
+                  changedTile = true;
+               }
+            }
+            else {
+               offsetX += speed;
+               if (offsetX > map.blocksize/2)
+                  offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+            }         
+         }
+
+         else if (direction == UP) {
+            if (map.isOpen(posX,posY-1)) {
+               offsetY -= speed;
+               if (offsetY < 0) {
+                  offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+                  posY--;
+                  offsetY += map.blocksize;
+                  changedTile = true;
+               }
+            }
+            else {
+               offsetY -= speed;
+               if (offsetY < map.blocksize/2)
+                  offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+            }
+         }
+
+         else { //dir == DOWN
+            if (map.isOpen(posX,posY+1)) {
+               offsetY += speed;
+               if (offsetY > map.blocksize) {
+                  offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+                  posY++;
+                  offsetY -= map.blocksize;
+                  changedTile = true;
+               }
+            }
+            else {
+               offsetY += speed;
+               if (offsetY > map.blocksize/2)
+                  offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+            }
+         }
+
+         if (changedTile) {
+            Item item = map.getItem(posX,posY);
+            if (item != null) {
+               score += item.use();
+            }
+         } 
+      }
+   }
+   /*
+   public void play() {
       boolean changedTile = false;
       
       inni void move(int dir) {
-         direction = dir;
+         //direction = dir;
+         switch (dir) {
+            case LEFT:
+               if (map.isOpen(posX-1, posY)) direction = dir;
+               break;
+            case RIGHT:
+               if (map.isOpen(posX+1, posY)) direction = dir;
+               break;
+            case UP:
+               if (map.isOpen(posX, posY-1)) direction = dir;
+               break;
+            case DOWN:
+               if (map.isOpen(posX, posY+1)) direction = dir;
+               break;
+            default:
+               direction = dir;
+         }
       }
       [] else { }
 
@@ -32,11 +161,17 @@ public class User extends GamePiece {
          if (map.isOpen(posX-1,posY)) {
             offsetX -= speed;
             if (offsetX < 0) {
+               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
                posX--;
-               if (posX == 0) posX = 2;
+               if (posX == 0) posX = 27;
                offsetX += map.blocksize;
                changedTile = true;
             }
+         }
+         else {
+            offsetX -= speed;
+            if (offsetX < map.blocksize/2)
+               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
          }
       }
 
@@ -44,22 +179,34 @@ public class User extends GamePiece {
          if (map.isOpen(posX+1,posY)) {
             offsetX += speed;
             if (offsetX > map.blocksize) {
+               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
                posX++;
                if (posX == 27) posX = 0;
                offsetX -= map.blocksize;
                changedTile = true;
             }
          }
+         else {
+            offsetX += speed;
+            if (offsetX > map.blocksize/2)
+               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
+         }         
       }
 
       else if (direction == UP) {
          if (map.isOpen(posX,posY-1)) {
             offsetY -= speed;
             if (offsetY < 0) {
+               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
                posY--;
                offsetY += map.blocksize;
                changedTile = true;
             }
+         }
+         else {
+            offsetY -= speed;
+            if (offsetY < map.blocksize/2)
+               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
          }
       }
 
@@ -67,22 +214,29 @@ public class User extends GamePiece {
          if (map.isOpen(posX,posY+1)) {
             offsetY += speed;
             if (offsetY > map.blocksize) {
+               offsetX = offsetX/map.blocksize * posX + map.blocksize/2;
                posY++;
                offsetY -= map.blocksize;
                changedTile = true;
             }
          }
+         else {
+            offsetY += speed;
+            if (offsetY > map.blocksize/2)
+               offsetY = offsetY/map.blocksize * posY + map.blocksize/2;
+         }
       }
 
       if (changedTile) {
          Item item = map.getItem(posX,posY);
-         if (item != null)
-            item.use();
+         if (item != null) {
+            score += item.use();
+         }
       } 
    } 
-	
-	public void paint(Graphics2D g) {
-		int x = (posX * map.blocksize + offsetX);
+   */
+   public void paint(Graphics2D g) {
+      int x = (posX * map.blocksize + offsetX);
       int y = (posY * map.blocksize + offsetY);
       int mouth=305; //open = 305, closed = 360      
       g.setColor(color);

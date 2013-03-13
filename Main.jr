@@ -8,7 +8,7 @@ public class Main extends JFrame {
        KeyManager ki = new KeyManager(keyChar);
        addKeyListener(ki);
 	    add(new Game(resx, resy, keyChar));
-	    setTitle("PacMan");
+	    setTitle("JR Pac-Man");
 	    setDefaultCloseOperation(EXIT_ON_CLOSE);
 	    setSize(resx, resy);
 	    setLocationRelativeTo(null);
@@ -16,6 +16,6 @@ public class Main extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		new Main(1024, 750);
+		new Main(650, 775);
 	}
 }

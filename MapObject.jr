@@ -13,4 +13,12 @@ public abstract class MapObject {
 	protected int id;
 	
 	public abstract void paint(Graphics2D g);
+
+	public int getX() {
+		return posX;
+	}
+
+	public int getY() {
+		return posY;
+	}
 }
